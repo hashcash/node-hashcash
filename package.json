@@ -1,0 +1,23 @@
+{
+  "name": "hashcash",
+  "version": "0.0.1",
+  "author": "Pavel Karoukin <pavel@karoukin.us>",
+  "description": "HashCash.io integration",
+  "main": "./lib/hashcash",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hashcash/node-hashcash.git"
+  },
+  "keywords": [
+    "http",
+    "server"
+  ],
+  "dependencies": {
+    "restler": "^3.2.0",
+    "q": "^1.0.0"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.10"
+  }
+}
