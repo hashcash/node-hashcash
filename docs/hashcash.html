@@ -44,14 +44,16 @@
               </div>
               <p>To instantiate:</p>
 <blockquote>
-<p>var api = new Hashcash(‘API-KEY’);</p>
+<p>var api = new Hashcash(‘SECRET-API-KEY’, ‘PUBLIC-API-KEY’);</p>
 </blockquote>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Hashcash = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(apikey, serverUrl)</span> {</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Hashcash = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(apikey, publickey, serverUrl)</span> {</span>
+<span class="hljs-pi">    "use strict"</span>;
+
     <span class="hljs-keyword">if</span> (! serverUrl) {
-        serverUrl = <span class="hljs-string">'http://bitcaptcha:3000'</span>;
+        serverUrl = <span class="hljs-string">'http://hashcash.io/'</span>;
     }
 
     <span class="hljs-keyword">return</span> {</pre></div></div>
@@ -95,7 +97,7 @@ find out how much work was already done.</p>
             <span class="hljs-keyword">var</span> deferred = Q.defer();
 
             rest.get(
-                serverUrl + <span class="hljs-string">'/api/work'</span>,
+                serverUrl + <span class="hljs-string">'api/work'</span>,
                 {
                     query: {
                         apikey: apikey,
@@ -104,7 +106,7 @@ find out how much work was already done.</p>
                 }
             ).on(<span class="hljs-string">'complete'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data, response)</span> {</span>
                 <span class="hljs-keyword">if</span> (data <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Error</span> || response.statusCode &lt; <span class="hljs-number">200</span> || response.statusCode &gt; <span class="hljs-number">299</span>) {
-                    deferred.reject(data, response);
+                    deferred.resolve(data, response);
                     <span class="hljs-keyword">return</span>;
                 }
 
@@ -143,7 +145,7 @@ res.end(api.getWorkerCode());</p>
                 <span class="hljs-keyword">return</span>;
             }
 
-            rest.get(serverUrl + <span class="hljs-string">'/js/libs/pow/pow.worker.min.js'</span>)
+            rest.get(serverUrl + <span class="hljs-string">'js/libs/pow/pow.worker.min.js'</span>)
                 .on(<span class="hljs-string">'complete'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data, response)</span> {</span>
                     <span class="hljs-keyword">if</span> (response.statusCode == <span class="hljs-number">200</span>) {
                         deferred.resolve(data);
@@ -151,9 +153,46 @@ res.end(api.getWorkerCode());</p>
                     }
 
                     deferred.reject(data, response);
-                })
+                });
 
             <span class="hljs-keyword">return</span> deferred.promise;
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p><strong>getBundleUrl()</strong></p>
+<p>Returns URL to proof-of-work bundle from hashcash.io to be used
+in HTML head.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        getBundleUrl: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+            <span class="hljs-keyword">return</span> serverUrl + <span class="hljs-string">'js/libs/pow/pow.bundle.min.js'</span>;
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p><strong>getServerUrl()</strong></p>
+<p>Return server base URL.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        getServerUrl: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+            <span class="hljs-keyword">return</span> serverUrl;
         }
     };
 };
