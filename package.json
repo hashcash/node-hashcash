@@ -1,6 +1,6 @@
 {
   "name": "hashcash.io",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Pavel Karoukin <pavel@karoukin.us>",
   "description": "HashCash.io integration",
   "main": "./lib/hashcash",
