@@ -56,7 +56,7 @@
         serverUrl = <span class="hljs-string">'http://hashcash.io/'</span>;
     }
 
-    <span class="hljs-keyword">return</span> {</pre></div></div>
+    <span class="hljs-keyword">var</span> Api = {</pre></div></div>
             
         </li>
         
@@ -138,16 +138,18 @@ res.end(api.getWorkerCode());</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>        getWorkerCode: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(refresh)</span> {</span>
+            <span class="hljs-keyword">var</span> api = <span class="hljs-keyword">this</span>;
             <span class="hljs-keyword">var</span> deferred = Q.defer();
 
-            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.cachedWorkerCode &amp;&amp; !refresh) {
+            <span class="hljs-keyword">if</span> (api.cachedWorkerCode &amp;&amp; !refresh) {
                 deferred.resolve(<span class="hljs-keyword">this</span>.cachedWorkerCode);
-                <span class="hljs-keyword">return</span>;
+                <span class="hljs-keyword">return</span> deferred.promise;
             }
 
             rest.get(serverUrl + <span class="hljs-string">'js/libs/pow/pow.worker.min.js'</span>)
                 .on(<span class="hljs-string">'complete'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data, response)</span> {</span>
                     <span class="hljs-keyword">if</span> (response.statusCode == <span class="hljs-number">200</span>) {
+                        api.cachedWorkerCode = data;
                         deferred.resolve(data);
                         <span class="hljs-keyword">return</span>;
                     }
@@ -194,7 +196,24 @@ in HTML head.</p>
             <div class="content"><div class='highlight'><pre>        getServerUrl: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
             <span class="hljs-keyword">return</span> serverUrl;
         }
-    };
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Force to cache worker.js code</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Api.getWorkerCode();
+
+    <span class="hljs-keyword">return</span> Api;
 };
 
 module.exports = Hashcash;</pre></div></div>
